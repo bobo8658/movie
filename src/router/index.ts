@@ -4,17 +4,17 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/home',
     name: 'Home',
-    component: () => import(/* webpackChunkName: "Home" */ '@/views/home.vue')
+    component: () => import('@/views/Home.vue')
   },
   {
     path: '/login',
     name: 'Login',
-    component: () => import(/* webpackChunkName: "Home" */ '@/views/login.vue')
+    component: () => import('@/views/Login.vue')
   },
   {
     path: '/register',
     name: 'Register',
-    component: () => import(/* webpackChunkName: "Home" */ '@/views/register.vue')
+    component: () => import('@/views/Register.vue')
   },
   { path: '/', redirect: { name: 'Login' } }
 ]
