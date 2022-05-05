@@ -14,6 +14,9 @@ export const register = (params: any) => {
   return instance({
     method: 'post',
     url: '/user/register',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
     data: params
   })
 }
@@ -21,6 +24,9 @@ export const sendEmail = (params: any) => {
   return instance({
     method: 'post',
     url: '/user/sendEmail',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
     data: params
   })
 }

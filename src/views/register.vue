@@ -15,21 +15,22 @@ const ruleForm = reactive({
 })
 
 const timeCount = ref()
-const SendEmail = () => {
-  sendEmail({ email: ruleForm.email })
+const SendEmail = async () => {
+  await sendEmail({ email: ruleForm.email })
+  ElMessage.success('发送成功')
   timeCount.value = 60
   const time = setInterval(() => {
     timeCount.value--
     if (timeCount.value === 0) {
       clearInterval(time)
     }
-  },1000)
+  }, 1000)
 }
 
 const Register = async () => {
   await register(ruleForm)
   ElMessage.success('注册成功')
-  setTimeout(() => router.push('/login'), 2020)
+  setTimeout(() => router.push('login'), 2020)
 }
 
 const rules = reactive({
@@ -72,48 +73,68 @@ const resetForm = (formEl: FormInstance | undefined) => {
 </script>
       
 <template>
-  <div class="register">
-    <h1>电影购票系统</h1>
-    <el-form
-      ref="ruleFormRef"
-      :model="ruleForm"
-      status-icon
-      :rules="rules"
-      label-width="120px"
-      class="demo-ruleForm"
-    >
-      <el-form-item label="用户名" prop="username">
-        <el-input v-model="ruleForm.username" type="test" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="邮箱" prop="email">
-        <el-input v-model="ruleForm.email" type="test" autocomplete="off" style="width: 80%;"/>
-        <el-button v-if="!timeCount" @click="SendEmail()">获取验证码</el-button>
-        <el-button v-else disabled>{{timeCount}}s重试</el-button>
-      </el-form-item>
-      <el-form-item label="邮箱验证码" prop="code">
-        <el-input v-model="ruleForm.code" type="test" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input v-model="ruleForm.password" type="password" autocomplete="off" />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="submitForm(ruleFormRef)">注册</el-button>
-        <el-button @click="resetForm(ruleFormRef)">重置</el-button>
-      </el-form-item>
-    </el-form>
-    <router-link to="/login">已有账号，立即登录</router-link>
+  <div class="bg">
+    <div class="register">
+      <h1>电影购票系统</h1>
+      <el-form ref="ruleFormRef" :model="ruleForm" status-icon :rules="rules" label-width="120px" class="demo-ruleForm">
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="ruleForm.username" type="test" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="ruleForm.email" type="test" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="邮箱验证码" prop="code">
+          <el-input v-model="ruleForm.code" type="test" autocomplete="off" style="width: 63%;" />
+          <el-button v-if="!timeCount" @click="SendEmail()">获取验证码</el-button>
+          <el-button v-else disabled>{{ timeCount }}s重试</el-button>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="ruleForm.password" type="password" autocomplete="off" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm(ruleFormRef)">注册</el-button>
+          <el-button @click="resetForm(ruleFormRef)">重置</el-button>
+        </el-form-item>
+      </el-form>
+      <router-link to="/login">已有账号，立即登录</router-link>
+    </div>
   </div>
 </template>
 
+<style lang="scss">
+body {
+  margin: 0;
+}
 
+.bg {
+  background: url('/bg.jpg') no-repeat;
+  background-position: center;
+  height: 100%;
+  width: 100%;
+  background-size: cover;
+  position: fixed;
+}
 
-
-<style lang="scss" scoped>
 .register {
-  margin: 26vh auto 0;
+  box-shadow: 0px 0px 30px rgb(180, 180, 180);
+  margin: 20vh auto 0;
+  padding: 5vh 0;
   width: 600px;
 }
-.el-button{
+
+.el-input {
+  width: 400px;
+}
+
+.el-button {
   width: 20%;
+  margin-bottom: 0;
+}
+
+.el-form-item__label {
+  color: rgb(31, 31, 31);
+}
+.el-form-item__error{
+  color: rgb(238, 255, 0);
 }
 </style>

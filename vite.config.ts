@@ -14,6 +14,16 @@ export default defineConfig({
   server: {
     port: 4000,
     open: true,
-    cors: true
+    cors: true,
+    proxy:{
+      "/api":{
+        target:"http://47.95.192.39:8080",
+        rewrite: path => path.replace(/^\/api/, ''),
+        changeOrigin: true,
+      }
+      // "/api":{
+      //   target:"http://39.108.183.234:8080"
+      // }
+    }
   }
 })

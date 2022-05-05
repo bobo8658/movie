@@ -5,6 +5,9 @@ import type { FormInstance } from 'element-plus'
 import { login } from '../api'
 import router from '../router'
 import { useUserStore } from '../store'
+import { ElMessage } from 'element-plus'
+
+const user = useUserStore()
 
 const ruleFormRef = ref<FormInstance>()
 
@@ -26,9 +29,11 @@ const rules = reactive({
 
 const Login = async () => {
   const data: any = await login(ruleForm)
-  useUserStore().user = data
-  console.log(useUserStore().user)
-  router.push('/home')
+  user.$patch({...data})
+  ElMessage.success('登录成功')
+  setTimeout(() => {
+    router.push('home')
+  }, 2000);
 }
 
 const submitForm = (formEl: FormInstance | undefined) => {
@@ -52,7 +57,8 @@ const resetForm = (formEl: FormInstance | undefined) => {
 </script>
       
 <template>
-  <div class="login">
+  <div class="bg">
+    <div class="login">
     <h1>电影购票系统</h1>
     <el-form ref="ruleFormRef" :model="ruleForm" status-icon :rules="rules" label-width="120px" class="demo-ruleForm">
       <el-form-item label="邮箱" prop="email">
@@ -68,18 +74,41 @@ const resetForm = (formEl: FormInstance | undefined) => {
     </el-form>
     <router-link to="/register">没有账号，立即注册</router-link>
   </div>
+  </div>
 </template>
 
-
-
-
-<style lang="scss" scoped>
+<style lang="scss">
+body{
+  margin: 0;
+}
+.bg{
+  background: url('/bg.jpg') no-repeat;
+  background-position: center;
+  height: 100%;
+  width: 100%;
+  background-size: cover;
+  position: fixed;
+}
 .login {
+  box-shadow: 0px 0px 30px rgb(180, 180, 180);
   margin: 26vh auto 0;
+  padding: 5vh 0;
   width: 600px;
+}
+
+.el-input {
+  width: 400px;
 }
 
 .el-button {
   width: 20%;
+  margin-bottom: 20px;
+}
+
+.el-form-item__label{
+  color: rgb(31, 31, 31);
+}
+.el-form-item__error{
+  color: rgb(238, 255, 0);
 }
 </style>
