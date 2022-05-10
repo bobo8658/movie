@@ -74,11 +74,53 @@ export const addOrder = (params: any) => {
     data: params
   })
 }
+export const allOrder = (params: any) => {
+  return instance({
+    method: 'post',
+    url: 'order/selectOrder',
+    data: params
+  })
+}
+export const payOrder = (params: any) => {
+  return instance({
+    method: 'post',
+    url: 'order/pay',
+    data: params
+  })
+}
+export const delOrder = (params: any) => {
+  return instance({
+    method: 'post',
+    url: 'order/deleteOrder',
+    data: params
+  })
+}
+export const updOrder = (params: any) => {
+  return instance({
+    method: 'post',
+    url: 'order/updateOrder',
+    data: params
+  })
+}
 // 预定
 export const addBook = (params: any) => {
   return instance({
     method: 'post',
     url: 'book/add',
+    data: params
+  })
+}
+export const allBook = (params: any) => {
+  return instance({
+    method: 'post',
+    url: 'book/select',
+    data: params
+  })
+}
+export const delBook = (params: any) => {
+  return instance({
+    method: 'post',
+    url: 'book/delete',
     data: params
   })
 }

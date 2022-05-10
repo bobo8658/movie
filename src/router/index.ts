@@ -23,6 +23,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/Movie.vue')
   },
   {
+    path: '/Order',
+    name: 'order',
+    component: () => import('@/views/Order.vue')
+  },
+  {
     path: '/adminLogin',
     name: 'AdminLogin',
     component: () => import('@/views/admin/Login.vue')

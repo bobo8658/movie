@@ -3,29 +3,49 @@
 import { ref } from 'vue'
 import router from '../router'
 import { ElMessage } from 'element-plus'
-import { toVip, getVip } from '../api'
+import { toVip, getVip, allBook, delBook } from '../api'
 
 // 用户
 const userInfoFormVisible = ref(false)
+const userBookFormVisible = ref(false)
 const user = JSON.parse((localStorage.getItem('user')) as string)
 const { username, sex, phone, info, age, userId } = user
 const userInfo = ref({ username, sex, phone, info, age, userId })
+const books = ref()
+
 const handleLogout = (key: any) => {
   console.log(key)
   if (key == 'info') {
-    console.log(userInfo);
+    userInfoFormVisible.value = true
     return
+  }
+  if (key == 'book') {
+    userBookFormVisible.value = true
+    getUserBook()
+    return
+  }
+  if (key == 'order') {
+    router.push('order')
   }
   if (key == 'logout') {
     localStorage.removeItem('user')
     router.go(0)
   }
 }
+
 const handleSubmitUserInfo = async () => {
   await toVip(userInfo.value)
   ElMessage.success('修改成功')
   const data = getVip({ userId })
   localStorage.setItem('user', JSON.stringify(data))
+}
+
+const getUserBook = async () => {
+  books.value = await allBook({ userId })
+}
+const delUserBook = async (bookId: number) => {
+  await delBook({ bookId })
+  return getUserBook()
 }
 </script>
 
@@ -36,9 +56,9 @@ const handleSubmitUserInfo = async () => {
     </span>
     <template #dropdown>
       <el-dropdown-menu>
-        <el-dropdown-item command="info" @click="userInfoFormVisible = true">个人信息</el-dropdown-item>
-        <el-dropdown-item command="info" @click="userInfoFormVisible = true">我的预定</el-dropdown-item>
-        <el-dropdown-item command="info" @click="userInfoFormVisible = true">我的订单</el-dropdown-item>
+        <el-dropdown-item command="info">个人信息</el-dropdown-item>
+        <el-dropdown-item command="book">我的预定</el-dropdown-item>
+        <el-dropdown-item command="order">我的订单</el-dropdown-item>
         <el-dropdown-item command="logout">退出登录</el-dropdown-item>
       </el-dropdown-menu>
     </template>
@@ -71,22 +91,20 @@ const handleSubmitUserInfo = async () => {
       </span>
     </template>
   </el-dialog>
+  <el-dialog v-model="userBookFormVisible" title="我的预定" width="400px">
+    <el-table :data="books">
+      <el-table-column property="movieName" label="电影名" width="260%" />
+      <el-table-column label="操作">
+      <template #default="scope">
+        <el-button size="small" @click="delUserBook(scope.row.bookId)"
+          >删除</el-button
+        >
+      </template>
+    </el-table-column>
+    </el-table>
+  </el-dialog>
 
 </template>
 
 <style lang="scss" scoped>
-nav {
-  display: flex;
-  padding: 10px 0;
-  justify-content: space-between;
-  align-items: center;
-
-  .logo {
-    height: 40px;
-  }
-
-  .search {
-    width: 300px;
-  }
-}
 </style>
