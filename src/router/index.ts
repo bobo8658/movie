@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 
 const routes: Array<RouteRecordRaw> = [
+  { path: '/', redirect: { name: 'Home' } },
   {
     path: '/home',
     name: 'Home',
@@ -16,7 +17,16 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Register',
     component: () => import('@/views/Register.vue')
   },
-  { path: '/', redirect: { name: 'Login' } }
+  {
+    path: '/movie',
+    name: 'Movie',
+    component: () => import('@/views/Movie.vue')
+  },
+  {
+    path: '/adminLogin',
+    name: 'AdminLogin',
+    component: () => import('@/views/admin/Login.vue')
+  },
 ]
 
 const router = createRouter({

@@ -1,23 +1,30 @@
             
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { useUserStore } from '../store'
+import router from '../router'
+import { inquireMovie } from '../api'
 import { Search } from '@element-plus/icons-vue'
+import User from '../components/User.vue'
+// 用户
 const searchMovie = ref('')
-const userStore = useUserStore()
-let userInfoFormVisible = false
+const user = JSON.parse((localStorage.getItem('user')) as string)
 
-const handleLogout = (key: any) => {
-  console.log(key)
-  if (key == 'name') return
-  if (key == 'email') return
-  if (key == 'info') {
-    userInfoFormVisible = true
-    return
-  }
-  if (key == 'logout') {
-    userStore.userId = 10
-  }
+// 电影
+interface searchType {
+  key: string,
+  movieType: string,
+  recommend: string
+}
+const search = ref<searchType>({
+  key: '',
+  movieType: '',
+  recommend: ''
+})
+const movie = ref()
+inquireMovie(search.value).then(res => movie.value = res)
+const toMovie = (index: number) => {
+  const movieId = movie.value[index].movieId
+  router.push(`movie?id=${movieId}`)
 }
 </script>
 
@@ -27,22 +34,22 @@ const handleLogout = (key: any) => {
       <el-image src="/logo.png" class="logo"></el-image>
       <el-input v-model="searchMovie" class="w-50 m-2 search" placeholder="搜索电影" :suffix-icon="Search" />
       <div class="user">
-        <el-dropdown v-if="userStore.userId" @command="handleLogout">
-          <span class="el-dropdown-link">
-            <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
-          </span>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item command="info">个人中心</el-dropdown-item>
-              <el-dropdown-item command="logout">退出</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
+        <User v-if="user"></User>
         <router-link to="/login" v-else>登陆注册</router-link>
       </div>
     </nav>
-    {{ userStore.userId }}
+    <main>
+      <!-- <h2>推荐电影</h2> -->
+      <div class="movieList">
+        <div class="movie" v-for="(item, index) in movie" @click="toMovie(index)">
+          <img :src="item.imgPath" alt="">
+          <div class="name">{{ item.movieName }} </div>
+          <div class="grade">评分:{{ item.grade }}分 </div>
+        </div>
+      </div>
+    </main>
   </div>
+
 </template>
 
 <style lang="scss" scoped>
@@ -63,6 +70,27 @@ nav {
 
   .search {
     width: 300px;
+  }
+}
+
+main {
+  .movieList {
+    display: flex;
+    flex-wrap: wrap;
+
+    .movie {
+      width: 200px;
+      margin: 30px;
+      cursor: pointer;
+
+      img {
+        width: 120px;
+      }
+
+      .name {
+        margin: 6px auto;
+      }
+    }
   }
 }
 </style>
