@@ -1,12 +1,13 @@
             
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import router from '../router'
 import { inquireMovie } from '../api'
 import { Search } from '@element-plus/icons-vue'
 import User from '../components/User.vue'
+import { debounce } from '../hook/debounce'
+
 // 用户
-const searchMovie = ref('')
 const user = JSON.parse((localStorage.getItem('user')) as string)
 
 // 电影
@@ -26,13 +27,18 @@ const toMovie = (index: number) => {
   const movieId = movie.value[index].movieId
   router.push(`movie?id=${movieId}`)
 }
+// 电影搜索
+const inputchange = debounce(() => {
+  inquireMovie(search.value).then(res => movie.value = res)
+}, 500)
 </script>
 
 <template>
   <div class="home">
     <nav>
       <el-image src="/logo.png" class="logo"></el-image>
-      <el-input v-model="searchMovie" class="w-50 m-2 search" placeholder="搜索电影" :suffix-icon="Search" />
+      <el-input v-model="search.key" class="w-50 m-2 search" placeholder="搜索电影" :suffix-icon="Search"
+        @input="inputchange" />
       <div class="user">
         <User v-if="user"></User>
         <router-link to="/login" v-else>登陆注册</router-link>
@@ -49,7 +55,6 @@ const toMovie = (index: number) => {
       </div>
     </main>
   </div>
-
 </template>
 
 <style lang="scss" scoped>
