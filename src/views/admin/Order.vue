@@ -2,7 +2,7 @@
 <script lang="ts" setup>
 import { ElMessage } from 'element-plus';
 import { ref } from 'vue';
-import { inquireMovieDetail } from '../../api';
+import { inquireMovieDetail, delOrder } from '../../api';
 import { allOrder } from '../../api/admin';
 
 const orders = ref()
@@ -15,7 +15,11 @@ const getAllOrder = async () => {
   })
 }
 getAllOrder()
-const deleteOrder = async (orderId: number) => {}
+const deleteOrder = async (orderId: number) => {
+  await delOrder({orderId})
+  ElMessage.success('删除成功')
+  return getAllOrder()
+}
 </script>
 
 <template>
