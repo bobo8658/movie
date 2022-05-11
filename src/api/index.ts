@@ -1,7 +1,5 @@
 import instance from '../utils/http'
 
-// 前台
-
 // 用户
 export const login = (params: any) => {
   return instance({

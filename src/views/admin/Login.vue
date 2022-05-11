@@ -2,7 +2,7 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
 import type { FormInstance } from 'element-plus'
-import { login } from '../../api'
+import { login } from '../../api/admin'
 import router from '../../router'
 import { ElMessage } from 'element-plus'
 
@@ -25,10 +25,10 @@ const rules = reactive({
 
 const Login = async () => {
   const data: any = await login(ruleForm)
-  localStorage.setItem('admin', JSON.stringify(data))
+  localStorage.setItem('admin', JSON.stringify(ruleForm))
   ElMessage.success('登录成功')
   setTimeout(() => {
-    router.push('adminHome')
+    router.push('admin')
   }, 200);
 }
 
