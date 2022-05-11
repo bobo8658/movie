@@ -21,4 +21,10 @@ a{
   text-decoration: none;
   color: #409eff;
 }
+.el-button{
+  width: 80px;
+}
+.el-table .cell{
+  overflow: visible !important;
+}
 </style>

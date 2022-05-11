@@ -66,7 +66,7 @@ const delMovieInfo = (movie: any) => {
 
 }
 const viewMovieEvaluateForm = async (movieId: number) => {
-  const { allEvaluate } = await inquireMovieDetail({ movieId })
+  const { allEvaluate }: any = await inquireMovieDetail({ movieId })
   if (allEvaluate.length === 0) {
     ElMessage('暂无评论')
   } else {
