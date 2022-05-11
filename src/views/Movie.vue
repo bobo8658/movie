@@ -56,8 +56,8 @@ const addMovieBook = async () => {
       </div>
       <div class="detail">
         <h2>{{ movie.movieName }}
-          <!-- <el-button style="float: right" @click="movieOrderFormVisible = true">立即购票</el-button> -->
-          <el-button style="float: right" @click="addMovieBook">立即预定</el-button>
+          <el-button style="float: right" @click="movieOrderFormVisible = true">立即购票</el-button>
+          <!-- <el-button style="float: right" @click="addMovieBook">立即预定</el-button> -->
         </h2>
         <div>导演：{{ movie.director }}</div>
         <div>主演：{{ movie.actor }}</div>

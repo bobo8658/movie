@@ -1,10 +1,10 @@
 <script lang="ts" setup>
+const height = document.body.clientHeight
 const { admin } = JSON.parse(localStorage.getItem('admin') as string)
 const menuList = [
   { id: 0, menuName: '用户管理', path: '/admin/user' },
   { id: 1, menuName: '电影管理', path: '/admin/movie' },
-  { id: 2, menuName: '评论管理', path: '/admin/evaluate' },
-  { id: 3, menuName: '订单管理', path: '/admin/order' }
+  { id: 2, menuName: '订单管理', path: '/admin/order' }
 ]
 const next = (router: any) => {
   router.nextrouter = router
@@ -43,7 +43,6 @@ const next = (router: any) => {
   margin: 0;
   padding: 0;
 }
-
 .el-header {
   display: flex;
   justify-content: space-between;
@@ -66,7 +65,8 @@ const next = (router: any) => {
 
 .el-aside {
   background-color: #9ad2f0;
-  height: calc(100vh - 60px);
+  height: (--height);
+  min-height: calc(100vh - 60px);
   .el-menu-item{
     justify-content: center;
   }
