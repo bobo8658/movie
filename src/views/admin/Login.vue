@@ -28,7 +28,7 @@ const Login = async () => {
   localStorage.setItem('admin', JSON.stringify(ruleForm))
   ElMessage.success('登录成功')
   setTimeout(() => {
-    router.push('admin')
+    router.push('/admin')
   }, 200);
 }
 
