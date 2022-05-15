@@ -122,3 +122,10 @@ export const delBook = (params: any) => {
     data: params
   })
 }
+// 电影类别
+export const allMovieType = () => {
+  return instance({
+    method: 'get',
+    url: 'movieType/select'
+  })
+}

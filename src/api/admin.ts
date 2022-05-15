@@ -65,3 +65,18 @@ export const allOrder = () => {
     url: '/order/selectAllOrder'
   })
 }
+// 类别
+export const deleteMovieType = (params: any) => {
+  return instance({
+    method: 'post',
+    url: '/movieType/delete',
+    data: params
+  })
+}
+export const addMovieType = (params: any) => {
+  return instance({
+    method: 'post',
+    url: '/movieType/add',
+    data: params
+  })
+}

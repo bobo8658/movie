@@ -2,19 +2,41 @@
 <script lang="ts" setup>
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { reactive, ref } from 'vue';
-import { inquireMovie, inquireMovieDetail } from '../../api';
-import { addMovie, updateMovie, deleteMovie, deleteEvaluate } from '../../api/admin';
+import { inquireMovie, inquireMovieDetail, allMovieType } from '../../api';
+import { addMovie, updateMovie, deleteMovie, deleteEvaluate, deleteMovieType, addMovieType } from '../../api/admin';
 
+// 电影类别
+const types = ref()
+const viewMovieTypeFormVisible = ref(false)
+const getAllMovieType = async () => {
+  types.value = await allMovieType()
+}
+getAllMovieType()
+const delMovieType = async (typeId: number, index: number) => {
+  await deleteMovieType({ typeId })
+  types.value.splice(index, 1)
+}
+const addTypeInp = ref()
+const addType = async () => {
+  await addMovieType({ typeName: addTypeInp.value })
+  ElMessage.success('添加成功')
+  return getAllMovieType()
+}
+
+// 全部电影
 const movies = ref()
 const formateRecommend = (row: any) => row.recommend ? '是' : '否'
-const addMovieFormVisible = ref(false)
-const updMovieFormVisible = ref(false)
-const viewMovieEvaluateFormVisible = ref(false)
-const search = reactive({
-  key: '',
-  movieType: '',
-  recommend: ''
-})
+const getAllMovie = async () => {
+  const search = reactive({
+    key: '',
+    movieType: '',
+    recommend: ''
+  })
+  movies.value = await inquireMovie(search)
+}
+getAllMovie()
+
+// 添加电影
 const movieInfo = reactive({
   movieName: '',
   director: '',
@@ -29,18 +51,16 @@ const movieInfo = reactive({
   recommend: '',
   imgPath: ''
 })
-const updMovieInfo = ref()
-const evaluate = ref()
-const evaluateMovie = ref('')
-const getAllMovie = async () => {
-  movies.value = await inquireMovie(search)
-}
-getAllMovie()
+const addMovieFormVisible = ref(false)
 const addMovieInfo = async () => {
   await addMovie(movieInfo)
   ElMessage.success('添加成功')
   return getAllMovie()
 }
+
+// 修改电影信息
+const updMovieInfo = ref()
+const updMovieFormVisible = ref(false)
 const changeUpdMovieForm = (index: number) => {
   updMovieInfo.value = movies.value[index]
   updMovieFormVisible.value = true
@@ -50,6 +70,8 @@ const updateMovieInfo = async () => {
   ElMessage.success('修改成功')
   return getAllMovie()
 }
+
+// 删除电影
 const delMovieInfo = (movie: any) => {
   ElMessageBox.confirm(
     `确认要删除《${movie.movieName}》吗？`, '删除',
@@ -65,6 +87,11 @@ const delMovieInfo = (movie: any) => {
   })
 
 }
+
+// 电影评论
+const evaluate = ref()
+const evaluateMovie = ref('')
+const viewMovieEvaluateFormVisible = ref(false)
 const viewMovieEvaluateForm = async (movieId: number) => {
   const { allEvaluate }: any = await inquireMovieDetail({ movieId })
   if (allEvaluate.length === 0) {
@@ -80,10 +107,17 @@ const delMovieEvaluate = async (evaluateId: number, index: number) => {
   evaluate.value.splice(index, 1)
 }
 
+
 </script>
 
 <template>
   <div class="page">
+    <div class="categray">
+      <span class="title">电影分类</span>
+      <el-button @click="viewMovieTypeFormVisible = true">查看分类</el-button>
+      <el-input v-model="addTypeInp" class="add-type"></el-input>
+      <el-button @click="addType()">添加分类</el-button>
+    </div>
     <span class="title">电影信息</span>
     <el-button @click="addMovieFormVisible = true">添加电影</el-button>
     <el-table :data="movies">
@@ -108,6 +142,7 @@ const delMovieEvaluate = async (evaluateId: number, index: number) => {
       </el-table-column>
     </el-table>
   </div>
+  <!-- 添加电影 -->
   <el-dialog v-model="addMovieFormVisible" title="添加电影" width="50vw">
     <el-form :model="movieInfo">
       <el-form-item label="电影名" label-width="100px">
@@ -157,6 +192,7 @@ const delMovieEvaluate = async (evaluateId: number, index: number) => {
       </span>
     </template>
   </el-dialog>
+  <!-- 修改电影信息 -->
   <el-dialog v-model="updMovieFormVisible" title="修改电影信息" width="50vw">
     <el-form :model="updMovieInfo">
       <el-form-item label="电影名" label-width="100px">
@@ -206,6 +242,19 @@ const delMovieEvaluate = async (evaluateId: number, index: number) => {
       </span>
     </template>
   </el-dialog>
+  <!-- 全部类别 -->
+  <el-dialog v-model="viewMovieTypeFormVisible" title="类别管理" width="30vw">
+    <el-table :data="types">
+      <el-table-column prop="typeName" label="类别"></el-table-column>
+      <el-table-column fixed="right" label="操作" width="100">
+        <template #default="scope">
+          <el-button text size="small" @click.prevent="delMovieType(scope.row.typeId, scope.$index)">删除
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  </el-dialog>
+  <!-- 评论 -->
   <el-dialog v-model="viewMovieEvaluateFormVisible" :title="evaluateMovie" width="50vw">
     <el-table :data="evaluate">
       <el-table-column prop="username" label="用户名" width="100"></el-table-column>
@@ -234,5 +283,14 @@ const delMovieEvaluate = async (evaluateId: number, index: number) => {
 
 .el-button {
   margin: 2px 0;
+}
+
+.categray {
+  margin-bottom: 10px;
+}
+
+.add-type {
+  margin-left: 2vw;
+  width: 10vw;
 }
 </style>

@@ -1,6 +1,6 @@
             
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import router from '../router'
 import { inquireMovie } from '../api'
 import { Search } from '@element-plus/icons-vue'
