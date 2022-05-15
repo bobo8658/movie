@@ -155,7 +155,9 @@ const delMovieEvaluate = async (evaluateId: number, index: number) => {
         <el-input v-model="movieInfo.actor"></el-input>
       </el-form-item>
       <el-form-item label="类型" label-width="100px">
-        <el-input v-model="movieInfo.movieType"></el-input>
+        <el-select v-model="movieInfo.movieType" clearable placeholder="Select">
+          <el-option v-for="item in types" :key="item.typeName" :label="item.typeName" :value="item.typeName" />
+        </el-select>
       </el-form-item>
       <el-form-item label="图片地址" label-width="100px">
         <el-input v-model="movieInfo.imgPath"></el-input>
@@ -205,7 +207,9 @@ const delMovieEvaluate = async (evaluateId: number, index: number) => {
         <el-input v-model="updMovieInfo.actor"></el-input>
       </el-form-item>
       <el-form-item label="类型" label-width="100px">
-        <el-input v-model="updMovieInfo.movieType"></el-input>
+        <el-select v-model="updMovieInfo.movieType" clearable placeholder="Select">
+          <el-option v-for="item in types" :key="item.typeName" :label="item.typeName" :value="item.typeName" />
+        </el-select>
       </el-form-item>
       <el-form-item label="图片地址" label-width="100px">
         <el-input v-model="updMovieInfo.imgPath"></el-input>
